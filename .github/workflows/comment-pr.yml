@@ -1,0 +1,26 @@
+name: Add branch preview link to PR description
+on:
+  pull_request:
+    types: opened
+
+jobs:
+  add_preview_link_to_pr:
+    runs-on: ubuntu-latest
+    name: An example job to comment a PR
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v1
+
+      - name: Extract branch name
+        shell: bash
+        run: echo "##[set-output name=branch;]$(echo ${GITHUB_HEAD_REF#refs/heads/})"
+        id: extract_branch
+
+      - name: Add Preview URL to Description
+        if: startsWith(steps.extract_branch.outputs.branch, 'deploy-') || startsWith(steps.extract_branch.outputs.branch, 'dp-')
+        uses: tzkhan/pr-update-action@v2
+        with:
+          body-template: 'Preview: https://${{ steps.extract_branch.outputs.branch }}.example.com'
+          body-update-action: 'suffix'
+          repo-token: ${{ secrets.GITHUB_TOKEN }}
+          base-branch-regex: '[a-z\d-_.\\/]+'
