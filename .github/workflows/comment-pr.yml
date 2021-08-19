@@ -20,7 +20,10 @@ jobs:
         if: startsWith(steps.extract_branch.outputs.branch, 'deploy-') || startsWith(steps.extract_branch.outputs.branch, 'dp-')
         uses: tzkhan/pr-update-action@v2
         with:
-          body-template: 'Preview: https://${{ steps.extract_branch.outputs.branch }}.example.com'
+          base-branch-regex: '[a-z\d-_.\\/]+'
+          head-branch-regex: '([map]|[bug])+-[0-9]+'
+          body-template: |
+            Preview: https://${{ steps.extract_branch.outputs.branch }}.example.com
+            Jira: [%headbranch%]
           body-update-action: 'suffix'
           repo-token: ${{ secrets.GITHUB_TOKEN }}
-          base-branch-regex: '[a-z\d-_.\\/]+'
