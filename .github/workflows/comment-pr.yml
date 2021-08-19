@@ -22,6 +22,8 @@ jobs:
         with:
           base-branch-regex: '[a-z\d-_.\\/]+'
           head-branch-regex: '([map]|[bug])+-[0-9]+'
-          body-template: 'Preview: https://${{ steps.extract_branch.outputs.branch }}.example.com Jira: [%headbranch%]'
+          body-template: |
+            Preview: https://${{ steps.extract_branch.outputs.branch }}.example.com
+            Jira: [%headbranch%]
           body-update-action: 'suffix'
           repo-token: ${{ secrets.GITHUB_TOKEN }}
